@@ -6,7 +6,11 @@ using UnityEngine.EventSystems;
 public class carmovementscript : MonoBehaviour
 {
 
-    float speed = 3f;
+    float speed = 0f;
+    private float speedMultiplier = 0f;
+    private float accerationTime = 5f;
+    private float elapsedTime = 0f;
+    float accelation = 5;
     float turningSpeed = 45f;
     // Start is called before the first frame update
     void Start()
@@ -22,30 +26,27 @@ public class carmovementscript : MonoBehaviour
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            moveDirection += transform.forward; // Move forward
+            speed += accelation * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            moveDirection += Vector3.back; // Move backward
+            speed -= accelation * Time.deltaTime;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            moveDirection += Vector3.left; // Move left
+            transform.Rotate(Vector3.up, -turningSpeed* Time.deltaTime); // turn left
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            moveDirection += Vector3.right; // Move right
+            transform.Rotate(Vector3.up, turningSpeed * Time.deltaTime); // turn right
         }
 
         // Normalize to ensure consistent movement speed when moving diagonally
-        if (moveDirection.magnitude > 1)
-        {
-            moveDirection.Normalize();
-        }
-
+ 
+       
         // Apply movement
-        transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
+        transform.Translate(transform.forward * speed * Time.deltaTime, Space.World);
 
         //// Apply forward/backward movement
         //transform.Translate(moveDirection * speed * Time.deltaTime, Space.Self);
@@ -59,5 +60,17 @@ public class carmovementscript : MonoBehaviour
         {
             transform.Rotate(Vector3.up, turningSpeed * Time.deltaTime);  // Turn right
         }
+
+        ////Speed
+        ////Will gradually incerase the speed multiper over 5 seconds
+        //if (elapsedTime < accerationTime) {
+        //    elapsedTime = Time.deltaTime;
+        //    speedMultiplier = Mathf.Min(elapsedTime / accerationTime, 1f);
+                    
+        //}
+
+
+  
+
     }
 }
